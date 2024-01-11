@@ -28,7 +28,7 @@ function playRound(playerSelection, computerSelection) {
   const absoluteDifference = Math.abs(difference);
   let mapToTruthTable = truthTable[absoluteDifference];
   if (negative < 0) {
-    //if it's negative flip it to get the neggative half of the truth table (where the differences are negative)
+    //if it's negative flip it to get the negative half of the truth table (where the differences are negative)
     mapToTruthTable = !mapToTruthTable;
   }
   if (mapToTruthTable === true) {
