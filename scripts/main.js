@@ -8,8 +8,6 @@ function getComputerChoice() {
   return getRandomInt(3);
 }
 
-const playerSelection = "scissors";
-const computerSelection = getComputerChoice();
 /*
 Assumption for truth table: rock = 0, paper = 1, scissors = 2.
 
@@ -18,6 +16,7 @@ The logic for the truth table is as follows: The difference between the player c
  W |  L | D |  W |  L         
 Based on the above differences a truth table can be generated: -2 is win, -1 lose, 0 is draw, 1 is win, 2 is lose.
 */
+
 const truthTable = ["Draw", true, false]; //This is half the truth table we get the other half by taking the boolean values and reversing them if the difference is negative
 
 function playRound(playerSelection, computerSelection) {
@@ -29,15 +28,56 @@ function playRound(playerSelection, computerSelection) {
   let mapToTruthTable = truthTable[absoluteDifference];
   if (negative < 0) {
     //if it's negative flip it to get the negative half of the truth table (where the differences are negative)
-    mapToTruthTable = !mapToTruthTable;
+    return !mapToTruthTable;
   }
-  if (mapToTruthTable === true) {
-    return `You win! ${playerSelection} beats ${choices[computerSelection]}`;
-  } else if (mapToTruthTable === false) {
-    return `You lose! ${playerSelection} loses against ${choices[computerSelection]}`;
-  } else {
-    return `Draw ${playerSelection} == ${choices[computerSelection]}`;
-  }
+  return mapToTruthTable;
 }
 
-console.log(playRound(playerSelection, computerSelection)); //function call
+function game() {
+  let roundCounter = 5; //best of five game
+  let roundResult = 0; //variable to hold the result of one round using playRound function
+  let computerSelection = 0;
+  let playerSelection = "";
+  let computerScore = 0,
+    playerScore = 0;
+
+  while (roundCounter > 0) {
+    playerSelection = prompt("Rock, Paper or Scissors?: ");
+    computerSelection = getComputerChoice();
+    roundResult = playRound(playerSelection, computerSelection);
+    console.log(`Round ${roundCounter} Start! \n`);
+    if (roundResult === true) {
+      roundCounter--;
+      playerScore++;
+      console.log(
+        `You win! ${playerSelection} beats ${choices[computerSelection]}`,
+      );
+    } else if (roundResult === false) {
+      roundCounter--;
+      computerScore++;
+      console.log(
+        `You lose! ${playerSelection} loses against ${choices[computerSelection]}`,
+      );
+    } else {
+      //don't decrement round counter to make them replay the round
+      console.log(`Draw ${playerSelection} == ${choices[computerSelection]}`);
+    }
+  }
+  console.log(
+    `-------------------------------------- Game Complete -------------------------------------`,
+  );
+  //logic to determine who won the game
+  computerScore > playerScore
+    ? console.log(
+        `Computer wins(${computerScore}), Your Score is: ${playerScore}`,
+      )
+    : computerScore === playerScore
+      ? console.log(
+          `Draw! Computer Score is: ${computerScore} Your Score is: ${playerScore}`,
+        )
+      : console.log(
+          `You win! Your Score is: ${playerScore} Computer Score is: ${computerScore}`,
+        );
+}
+
+game(); //function call for game();
