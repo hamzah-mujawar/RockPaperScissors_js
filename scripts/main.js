@@ -1,8 +1,17 @@
 const choices = ["rock", "paper", "scissors"];
 
 const buttons = document.querySelectorAll("button");
+const div = document.querySelector("#results");
+const roundInfoP = document.createElement("p");
+const resultsP = document.createElement("p");
+div.appendChild(roundInfoP);
+div.appendChild(resultsP);
 
-let rounds = 5;
+let roundCounter = 5;
+let playerScore = 0;
+let computerScore = 0;
+let computerSelection = 0;
+let roundResult = 0;
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max); //Generates random numbers from 0 to max - 1
@@ -38,7 +47,26 @@ function playRound(playerSelection, computerSelection) {
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
-    console.log(playRound(button.id, getComputerChoice()));
-    round--;
+    computerSelection = getComputerChoice();
+    roundResult = playRound(button.id, computerSelection);
+    roundInfoP.textContent = `Round ${roundCounter} Start!`;
+    if (roundCounter <= 0) {
+      computerScore > playerScore
+        ? (resultsP.textContent = `Computer wins(${computerScore}), Your Score is: ${playerScore}`)
+        : computerScore === playerScore
+          ? (resultsP.textContent = `Draw! Computer Score is: ${computerScore} Your Score is: ${playerScore}`)
+          : (resultsP.textContent = `You win! Your Score is: ${playerScore} Computer Score is: ${computerScore}`);
+    } else if (roundResult === true) {
+      roundCounter--;
+      playerScore++;
+      resultsP.textContent = `You Win! ${button.id} wins against ${choices[computerSelection]}!`;
+    } else if (roundResult === false) {
+      roundCounter--;
+      computerScore++;
+      resultsP.textContent = `You lose! ${button.id} loses against ${choices[computerSelection]}`;
+    } else {
+      //don't decrement round counter to make them replay the round
+      resultsP.textContent = `Draw ${button.id} == ${choices[computerSelection]}`;
+    }
   });
 });
